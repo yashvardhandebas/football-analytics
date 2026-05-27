@@ -1,11 +1,11 @@
-# ⚽ Premier League 2024/25 — Data Analytics Project
+# Premier League 2024/25 — Data Analytics Project
 
 > **Why this project?**  
 > Everyone knows the final score. But *why* do certain teams win despite fewer shots? Does possession actually matter? Which players consistently outperform their xG? This project goes beyond the scoreline to uncover the hidden patterns driving results in the 2024/25 Premier League season.
 
 ---
 
-## 📌 Problem Statement
+## Problem Statement
 
 Football clubs, coaches, and analysts are drowning in raw match data with no clear story. This project answers:
 
@@ -18,7 +18,7 @@ Football clubs, coaches, and analysts are drowning in raw match data with no cle
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 football-analytics/
@@ -45,7 +45,7 @@ football-analytics/
 
 ---
 
-## 📊 Dataset Overview
+## Dataset Overview
 
 | Table | Rows | Description |
 |---|---|---|
@@ -58,7 +58,7 @@ football-analytics/
 
 ---
 
-## 🔍 Analysis Sections
+##Analysis Sections
 
 | # | Question | Method |
 |---|---|---|
@@ -75,7 +75,7 @@ football-analytics/
 
 ---
 
-## 🛠️ Tools & Stack
+## Tools & Stack
 
 | Tool | Purpose |
 |---|---|
@@ -89,7 +89,7 @@ football-analytics/
 
 ---
 
-## 🚀 How to Run
+##  How to Run
 
 ### Option 1 — Google Colab (Recommended)
 Click the badge below to open the notebook directly in Colab — no setup needed:
@@ -114,7 +114,7 @@ mysql -u your_user -p your_database < sql/01_schema.sql
 
 ---
 
-## 💡 Key Findings
+##  Key Findings
 
 > Full findings in [`reports/key_findings.md`](reports/key_findings.md)
 
@@ -126,9 +126,9 @@ mysql -u your_user -p your_database < sql/01_schema.sql
 
 ---
 
-## 👤 Author
+##  Author
 
-**Yash Vardhan Debas**  
+**Yashvardhan Debas**  
 Aspiring Data Analyst | Football & Data Enthusiast  
 [GitHub](https://github.com/yashvardhandebas) 
 
