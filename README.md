@@ -1,4 +1,4 @@
-# Premier League 2024/25 — Data Analytics Project
+#Beyond the Scoreline: A Data Analysis of European Football 2024/25
 
 > **Why this project?**  
 > Everyone knows the final score. But *why* do certain teams win despite fewer shots? Does possession actually matter? Which players consistently outperform their xG? This project goes beyond the scoreline to uncover the hidden patterns driving results in the 2024/25 Premier League season.
