@@ -1,33 +1,32 @@
-## Beyond the Scoreline: A Data Analysis of European Football 2024/25
+# Beyond the Scoreline: A Data Analysis of European Football 2024/25
 
 ## SQL Analysis
 
 This folder contains SQL queries used for exploratory data analysis and football analytics on the 2024/25 European football season dataset.
 
-The analysis focuses on:
-
-* match outcomes
-* home advantage
-* possession analysis
-* xG analysis
-* tactical formations
-* player performance
-* competition-level comparisons
-
----
-
-# Database Tables
-
-| Table            | Description                        |
-| ---------------- | ---------------------------------- |
-| football_matches | Match results and metadata         |
-| match_stats      | Match statistics and tactical data |
-| player_stats     | Individual player statistics       |
-| lineups          | Team formations and lineups        |
+### Analysis Focus
+- Match outcomes
+- Home advantage
+- Possession analysis
+- xG analysis
+- Tactical formations
+- Player performance
+- Competition-level comparisons
 
 ---
 
-# Competition Coverage
+## Database Tables
+
+| Table | Description |
+|---|---|
+| football_matches | Match results and metadata |
+| match_stats | Match statistics and tactical data |
+| player_stats | Individual player statistics |
+| lineups | Team formations and lineups |
+
+---
+
+## Competition Coverage
 
 ```sql
 SELECT
@@ -41,24 +40,26 @@ GROUP BY competition_name
 ORDER BY total_matches DESC;
 ```
 
-| Competition           | Matches | Teams |
-| --------------------- | ------- | ----- |
-| Serie A               | 380     | 20    |
-| Premier League        | 380     | 20    |
-| La Liga               | 380     | 20    |
-| Ligue 1               | 306     | 18    |
-| Bundesliga            | 306     | 18    |
-| UEFA Champions League | 189     | 36    |
+| Competition | Matches | Teams |
+|---|---|---|
+| Serie A | 380 | 20 |
+| Premier League | 380 | 20 |
+| La Liga | 380 | 20 |
+| Ligue 1 | 306 | 18 |
+| Bundesliga | 306 | 18 |
+| UEFA Champions League | 189 | 36 |
 
 ---
 
-# Match Outcome Distribution
+## Match Outcome Distribution
 
 ```sql
 SELECT
     match_outcome,
     COUNT(*) AS total,
-    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 1) AS percentage
+    ROUND(
+        COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(),
+    1) AS percentage
 FROM football_matches
 WHERE match_outcome IS NOT NULL
 GROUP BY match_outcome
@@ -66,43 +67,72 @@ ORDER BY total DESC;
 ```
 
 | Match Outcome | Matches | Percentage |
-| ------------- | ------- | ---------- |
-| Home Win      | 832     | 42.9%      |
-| Away Win      | 646     | 33.3%      |
-| Draw          | 463     | 23.9%      |
+|---|---|---|
+| Home Win | 832 | 42.9% |
+| Away Win | 646 | 33.3% |
+| Draw | 463 | 23.9% |
 
 ---
 
-# Home Advantage by Competition
+## Home Advantage by Competition
 
 ```sql
 SELECT
     competition_name,
-    SUM(CASE WHEN match_outcome = 'Home Win' THEN 1 ELSE 0 END) AS home_wins,
-    SUM(CASE WHEN match_outcome = 'Draw' THEN 1 ELSE 0 END) AS draws,
-    SUM(CASE WHEN match_outcome = 'Away Win' THEN 1 ELSE 0 END) AS away_wins,
+
+    SUM(
+        CASE
+            WHEN match_outcome = 'Home Win'
+            THEN 1
+            ELSE 0
+        END
+    ) AS home_wins,
+
+    SUM(
+        CASE
+            WHEN match_outcome = 'Draw'
+            THEN 1
+            ELSE 0
+        END
+    ) AS draws,
+
+    SUM(
+        CASE
+            WHEN match_outcome = 'Away Win'
+            THEN 1
+            ELSE 0
+        END
+    ) AS away_wins,
+
     COUNT(*) AS total_matches,
+
     ROUND(
-        SUM(CASE WHEN match_outcome = 'Home Win' THEN 1 ELSE 0 END)
-        * 100.0 / COUNT(*), 1
-    ) AS home_win_pct
+        SUM(
+            CASE
+                WHEN match_outcome = 'Home Win'
+                THEN 1
+                ELSE 0
+            END
+        ) * 100.0 / COUNT(*),
+    1) AS home_win_pct
+
 FROM football_matches
 GROUP BY competition_name
 ORDER BY home_win_pct DESC;
 ```
 
-| Competition           | Home Win % |
-| --------------------- | ---------- |
-| UEFA Champions League | 50.8%      |
-| Ligue 1               | 46.7%      |
-| La Liga               | 44.5%      |
-| Premier League        | 40.8%      |
-| Serie A               | 39.7%      |
-| Bundesliga            | 38.6%      |
+| Competition | Home Win % |
+|---|---|
+| UEFA Champions League | 50.8% |
+| Ligue 1 | 46.7% |
+| La Liga | 44.5% |
+| Premier League | 40.8% |
+| Serie A | 39.7% |
+| Bundesliga | 38.6% |
 
 ---
 
-# Most Common Scorelines
+## Most Common Scorelines
 
 ```sql
 SELECT
@@ -115,44 +145,65 @@ LIMIT 10;
 ```
 
 | Scoreline | Occurrences |
-| --------- | ----------- |
-| 1-1       | 224         |
-| 1-0       | 182         |
-| 2-1       | 163         |
-| 1-2       | 136         |
-| 0-1       | 136         |
+|---|---|
+| 1-1 | 224 |
+| 1-0 | 182 |
+| 2-1 | 163 |
+| 1-2 | 136 |
+| 0-1 | 136 |
+| 2-0 | 120 |
+| 2-2 | 110 |
+| 0-0 | 110 |
 
 ---
 
-# Halftime vs Fulltime Analysis
+## Halftime vs Fulltime Analysis
 
 ```sql
 SELECT
 CASE
-    WHEN halftime_home < halftime_away THEN 'Losing at HT'
-    WHEN halftime_home = halftime_away THEN 'Drawing at HT'
+    WHEN halftime_home < halftime_away
+    THEN 'Losing at HT'
+
+    WHEN halftime_home = halftime_away
+    THEN 'Drawing at HT'
+
     ELSE 'Winning at HT'
 END AS halftime_status,
+
 COUNT(*) AS matches,
-SUM(CASE WHEN match_outcome = 'Home Win' THEN 1 ELSE 0 END) AS ended_home_win,
+
+SUM(
+    CASE
+        WHEN match_outcome = 'Home Win'
+        THEN 1
+        ELSE 0
+    END
+) AS ended_home_win,
+
 ROUND(
-AVG(CASE WHEN match_outcome = 'Home Win'
-THEN 1.0 ELSE 0 END) * 100, 1
-) AS home_win_rate
+AVG(
+    CASE
+        WHEN match_outcome = 'Home Win'
+        THEN 1.0
+        ELSE 0
+    END
+) * 100, 1) AS home_win_rate
+
 FROM football_matches
 GROUP BY halftime_status
 ORDER BY home_win_rate DESC;
 ```
 
 | Halftime Status | Matches | Home Win Rate |
-| --------------- | ------- | ------------- |
-| Winning at HT   | 665     | 75.3%         |
-| Drawing at HT   | 748     | 35.7%         |
-| Losing at HT    | 528     | 12.1%         |
+|---|---|---|
+| Winning at HT | 665 | 75.3% |
+| Drawing at HT | 748 | 35.7% |
+| Losing at HT | 528 | 12.1% |
 
 ---
 
-# Match Statistics Summary
+## Match Statistics Summary
 
 ```sql
 SELECT
@@ -165,175 +216,254 @@ SELECT
 FROM match_stats;
 ```
 
-| Metric              | Value |
-| ------------------- | ----- |
-| Avg Home Possession | 50.4  |
-| Avg Away Possession | 49.6  |
-| Avg Home Shots      | 8.5   |
-| Avg Away Shots      | 8.3   |
-| Avg Home xG         | 1.64  |
-| Avg Away xG         | 1.47  |
+| Metric | Value |
+|---|---|
+| Avg Home Possession | 50.4 |
+| Avg Away Possession | 49.6 |
+| Avg Home Shots | 8.5 |
+| Avg Away Shots | 8.3 |
+| Avg Home xG | 1.64 |
+| Avg Away xG | 1.47 |
 
 ---
 
-# Does Possession Win Matches?
+## Does Possession Win Matches?
 
 ```sql
 SELECT
 CASE
-    WHEN ms.home_possession > 55 THEN 'High (>55%)'
-    WHEN ms.home_possession BETWEEN 45 AND 55 THEN 'Balanced (45-55%)'
+    WHEN ms.home_possession > 55
+    THEN 'High (>55%)'
+
+    WHEN ms.home_possession BETWEEN 45 AND 55
+    THEN 'Balanced (45-55%)'
+
     ELSE 'Low (<45%)'
 END AS possession_category,
+
 COUNT(*) AS matches,
-SUM(CASE WHEN m.match_outcome = 'Home Win' THEN 1 ELSE 0 END) AS wins,
+
+SUM(
+    CASE
+        WHEN m.match_outcome = 'Home Win'
+        THEN 1
+        ELSE 0
+    END
+) AS wins,
+
 ROUND(
-AVG(CASE WHEN m.match_outcome = 'Home Win'
-THEN 100.0 ELSE 0 END), 1
-) AS win_rate_pct
+AVG(
+    CASE
+        WHEN m.match_outcome = 'Home Win'
+        THEN 100.0
+        ELSE 0
+    END
+),1) AS win_rate_pct
+
 FROM match_stats ms
 JOIN football_matches m
 ON ms.match_id = m.match_id
+
 GROUP BY possession_category
 ORDER BY win_rate_pct DESC;
 ```
 
 | Possession Category | Matches | Win Rate |
-| ------------------- | ------- | -------- |
-| High (>55%)         | 331     | 100.0%   |
-| Balanced (45-55%)   | 1376    | 36.4%    |
-| Low (<45%)          | 234     | 0.0%     |
+|---|---|---|
+| High (>55%) | 331 | 100.0% |
+| Balanced (45-55%) | 1376 | 36.4% |
+| Low (<45%) | 234 | 0.0% |
 
 ---
 
-# Best Formations by Win Rate
+## Best Formations by Win Rate
 
 ```sql
 SELECT
     ms.home_formation AS formation,
     COUNT(*) AS matches_used,
-    SUM(CASE WHEN m.match_outcome = 'Home Win' THEN 1 ELSE 0 END) AS wins,
+
+    SUM(
+        CASE
+            WHEN m.match_outcome = 'Home Win'
+            THEN 1
+            ELSE 0
+        END
+    ) AS wins,
+
     ROUND(
-        AVG(CASE WHEN m.match_outcome = 'Home Win'
-        THEN 100.0 ELSE 0 END), 1
+        AVG(
+            CASE
+                WHEN m.match_outcome = 'Home Win'
+                THEN 100.0
+                ELSE 0
+            END
+        ),1
     ) AS win_rate_pct,
-    ROUND(AVG(ms.home_xg), 2) AS avg_xg_created
+
+    ROUND(AVG(ms.home_xg),2) AS avg_xg_created
+
 FROM match_stats ms
 JOIN football_matches m
 ON ms.match_id = m.match_id
+
 GROUP BY ms.home_formation
 ORDER BY win_rate_pct DESC;
 ```
 
 | Formation | Matches Used | Win Rate | Avg xG |
-| --------- | ------------ | -------- | ------ |
-| 4-4-2     | 467          | 43.7%    | 1.64   |
-| 4-3-3     | 514          | 43.2%    | 1.59   |
-| 4-2-3-1   | 524          | 43.1%    | 1.73   |
-| 3-5-2     | 436          | 41.3%    | 1.60   |
+|---|---|---|---|
+| 4-4-2 | 467 | 43.7% | 1.64 |
+| 4-3-3 | 514 | 43.2% | 1.59 |
+| 4-2-3-1 | 524 | 43.1% | 1.73 |
+| 3-5-2 | 436 | 41.3% | 1.60 |
 
 ---
 
-# xG Overperformance Analysis
+## xG Overperformance Analysis
 
 ```sql
 SELECT
     m.home_team AS team,
     m.competition_name,
+
     SUM(m.fulltime_home) AS actual_goals,
+
     ROUND(SUM(ms.home_xg), 2) AS expected_goals,
+
     ROUND(
         SUM(m.fulltime_home) - SUM(ms.home_xg),
     2) AS xg_overperformance
+
 FROM football_matches m
 JOIN match_stats ms
 ON m.match_id = ms.match_id
+
 GROUP BY m.home_team, m.competition_name
 ORDER BY xg_overperformance DESC;
 ```
 
-| Team              | xG Difference |
-| ----------------- | ------------- |
-| Borussia Dortmund | +6.36         |
-| Bayern Munich     | +5.95         |
-| OGC Nice          | +4.96         |
-| FC Barcelona      | +3.93         |
-| PSG               | +3.64         |
+| Team | xG Difference |
+|---|---|
+| Borussia Dortmund | +6.36 |
+| Bayern Munich | +5.95 |
+| OGC Nice | +4.96 |
+| FC Barcelona | +3.93 |
+| PSG | +3.64 |
 
 ---
 
-# Home vs Away Performance
+## Home vs Away Performance
 
 ```sql
 SELECT
     'Home' AS side,
     ROUND(AVG(fulltime_home), 2) AS avg_goals_scored,
     ROUND(AVG(home_points), 2) AS avg_points,
-    SUM(CASE WHEN match_outcome = 'Home Win' THEN 1 ELSE 0 END) AS wins,
+
+    SUM(
+        CASE
+            WHEN match_outcome = 'Home Win'
+            THEN 1
+            ELSE 0
+        END
+    ) AS wins,
+
     COUNT(*) AS total_matches,
+
     ROUND(
-        SUM(CASE WHEN match_outcome = 'Home Win' THEN 1 ELSE 0 END)
-        * 100.0 / COUNT(*), 1
-    ) AS win_rate_pct
+        SUM(
+            CASE
+                WHEN match_outcome = 'Home Win'
+                THEN 1
+                ELSE 0
+            END
+        ) * 100.0 / COUNT(*),
+    1) AS win_rate_pct
+
 FROM football_matches
+
 UNION ALL
+
 SELECT
     'Away' AS side,
     ROUND(AVG(fulltime_away), 2),
     ROUND(AVG(away_points), 2),
-    SUM(CASE WHEN match_outcome = 'Away Win' THEN 1 ELSE 0 END),
+
+    SUM(
+        CASE
+            WHEN match_outcome = 'Away Win'
+            THEN 1
+            ELSE 0
+        END
+    ),
+
     COUNT(*),
+
     ROUND(
-        SUM(CASE WHEN match_outcome = 'Away Win' THEN 1 ELSE 0 END)
-        * 100.0 / COUNT(*), 1
-    )
+        SUM(
+            CASE
+                WHEN match_outcome = 'Away Win'
+                THEN 1
+                ELSE 0
+            END
+        ) * 100.0 / COUNT(*),
+    1)
+
 FROM football_matches;
 ```
 
 | Side | Avg Goals | Avg Points | Win Rate |
-| ---- | --------- | ---------- | -------- |
-| Home | 1.54      | 1.52       | 42.9%    |
-| Away | 1.34      | 1.24       | 33.3%    |
+|---|---|---|---|
+| Home | 1.54 | 1.52 | 42.9% |
+| Away | 1.34 | 1.24 | 33.3% |
 
 ---
 
-# Top Goal Contributors
+## Top Goal Contributors
 
 ```sql
 SELECT
     player_name,
     team,
+
     COUNT(DISTINCT match_id) AS matches_played,
+
     SUM(goals) AS total_goals,
     SUM(assists) AS total_assists,
-    SUM(goals) + SUM(assists) AS goal_contributions,
+
+    SUM(goals) + SUM(assists)
+    AS goal_contributions,
+
     ROUND(
         SUM(goals) * 1.0
         / COUNT(DISTINCT match_id),
     2) AS goals_per_game,
-    ROUND(AVG(rating), 2) AS avg_rating
+
+    ROUND(AVG(rating),2) AS avg_rating
+
 FROM player_stats
 GROUP BY player_name, team
 ORDER BY total_goals DESC
 LIMIT 20;
 ```
 
-| Player                 | Team                | Goals | Assists |
-| ---------------------- | ------------------- | ----- | ------- |
-| Player 9               | FC Barcelona        | 16    | 2       |
-| Player 10              | FC Barcelona        | 14    | 4       |
-| Kevin De Bruyne        | Manchester City FC  | 11    | 11      |
-| Trent Alexander-Arnold | Liverpool FC        | 11    | 7       |
-| Alexander Isak         | Newcastle United FC | 12    | 4       |
+| Player | Team | Goals | Assists |
+|---|---|---|---|
+| Player 9 | FC Barcelona | 16 | 2 |
+| Player 10 | FC Barcelona | 14 | 4 |
+| Kevin De Bruyne | Manchester City FC | 11 | 11 |
+| Trent Alexander-Arnold | Liverpool FC | 11 | 7 |
+| Alexander Isak | Newcastle United FC | 12 | 4 |
 
 ---
 
-# SQL Concepts Used
+## SQL Concepts Used
 
-* JOINS
-* Aggregate Functions
-* CASE Statements
-* GROUP BY
-* Window Functions
-* Statistical Analysis
-* Tactical Performance Analysis
+- JOINS
+- Aggregate Functions
+- CASE Statements
+- GROUP BY
+- Window Functions
+- Statistical Analysis
+- Tactical Performance Analysis
