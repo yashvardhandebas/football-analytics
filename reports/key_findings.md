@@ -1,4 +1,4 @@
-# 📋 Key Findings — European Football 2024/25
+#  Key Findings — European Football 2024/25
 
 > A plain-English summary of the most important discoveries from analysing  
 > **1,941 matches** across 6 competitions: Premier League, La Liga, Serie A,  
@@ -6,7 +6,7 @@
 
 ---
 
-## 🔑 Finding 1 — Home Advantage Is Worth ~10 Points a Season
+##  Finding 1 — Home Advantage Is Worth ~10 Points a Season
 
 **What the data says:**
 - Home teams win **42.9%** of matches vs **33.3%** for away sides
@@ -18,7 +18,7 @@ That 0.28 point gap per game compounds over a 38-game season to roughly **10 ext
 
 ---
 
-## 🔑 Finding 2 — The First 45 Minutes Decide 3 Out of 4 Matches
+##  Finding 2 — The First 45 Minutes Decide 3 Out of 4 Matches
 
 **What the data says:**
 | Halftime Status | Matches | Final Home Win Rate |
@@ -32,7 +32,7 @@ Only **1 in 8 teams** losing at halftime manage to come back and win. This has a
 
 ---
 
-## 🔑 Finding 3 — Champions League Has the Strongest Home Advantage
+##  Finding 3 — Champions League Has the Strongest Home Advantage
 
 **What the data says:**
 | Competition | Home Win % | Away Win % |
@@ -49,7 +49,7 @@ The Champions League shows the most extreme home advantage — likely driven by 
 
 ---
 
-## 🔑 Finding 4 — 1-1 Is the Most Common Scoreline in European Football
+##  Finding 4 — 1-1 Is the Most Common Scoreline in European Football
 
 **What the data says:**
 - **1-1** occurred 224 times — the most common result
@@ -61,7 +61,7 @@ A single goal decides or changes the vast majority of football matches. This rei
 
 ---
 
-## 🔑 Finding 5 — Dortmund and Bayern Are Europe's Most Clinical Finishers
+##  Finding 5 — Dortmund and Bayern Are Europe's Most Clinical Finishers
 
 **What the data says:**
 | Team | Competition | Actual Goals | Expected Goals | Overperformance |
@@ -77,7 +77,7 @@ Both German giants scored 6 and 5 more goals respectively than their chances war
 
 ---
 
-## 🔑 Finding 6 — Leicester and Ipswich Were the Most Wasteful Sides
+##  Finding 6 — Leicester and Ipswich Were the Most Wasteful Sides
 
 **What the data says:**
 | Team | Competition | Actual Goals | Expected Goals | Underperformance |
@@ -92,7 +92,7 @@ The bottom four in xG underperformance are all Premier League sides who struggle
 
 ---
 
-## 🔑 Finding 7 — Formation Alone Doesn't Decide Matches
+##  Finding 7 — Formation Alone Doesn't Decide Matches
 
 **What the data says:**
 | Formation | Matches | Win Rate | Avg xG Created |
@@ -107,7 +107,7 @@ All 4 formations have win rates within **2.4% of each other** — a statisticall
 
 ---
 
-## 📌 Summary Table
+##  Summary Table
 
 | # | Finding | Key Number |
 |---|---|---|
@@ -121,11 +121,11 @@ All 4 formations have win rates within **2.4% of each other** — a statisticall
 
 ---
 
-## 🛠️ Tools Used
+##  Tools Used
 - **MySQL** — data storage and SQL analysis
 - **Python / pandas** — data manipulation
 - **Google Colab** — analysis notebook and visualisations
 - **seaborn / matplotlib** — charts
 
-## 📁 Data Note
+##  Data Note
 Match results are from the official 2024/25 season across all 6 competitions. Extended stats (xG, possession, player data) are synthetically generated using realistic statistical distributions for portfolio demonstration purposes.
